@@ -6798,6 +6798,7 @@ h2 {
 }
 h3 {
 	font-size: 1.6em;
+	text-align: center; /* Modified */
 }
 h4 {
 	font-size: 1.4em;

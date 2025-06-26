@@ -11,12 +11,29 @@ monogatari.action("message").messages({
 		`,
 	},
 	GoodEnd: {
-		title: "You finished the game and got a perfect score!",
+		title: "You got a good ending!",
 		body: `
 			<p style="text-align: center; font-size: 85%"><b>Congratulations!</b></p>
-			<p style="text-align: center; font-size: 80%">Thanks for playing the game and learning about the Tajima Yahei Sericulture Farm. Why don't you let us know about your perfect score? Or if you have any comments about the game, let us know!</p>
-			<p style="text-align: center; font-size: 70%"><a href='https://sites.google.com/isesaki-school.ed.jp/impress/contact'><b>Contact Us</b></a></p>
-			<p style="text-align: center; font-size: 80%">If you want to play again, click the link below!</p>
+			<p style="text-align: center; font-size: 80%">You found a good ending!</p>
+			<p style="text-align: center; font-size: 80%">You made it through {{stats.inventory.storyTracker}} scene(s). Try the story again to find more good endings!</p>
+			<p style="text-align: center; font-size: 70%"><a href='index.html'><b>Start Again</b></a></p>
+		`,
+	},
+	BadEnd: {
+		title: "You got a bad ending!",
+		body: `
+			<p style="text-align: center; font-size: 85%"><b>Oh, no!</b></p>
+			<p style="text-align: center; font-size: 80%">You reached a bad ending!</p>
+			<p style="text-align: center; font-size: 80%">You made it through {{stats.inventory.storyTracker}} scene(s). Try the story again to find a good ending!</p>
+			<p style="text-align: center; font-size: 70%"><a href='index.html'><b>Start Again</b></a></p>
+		`,
+	},
+	ToBeContinued: {
+		title: "You reached the end of the story!",
+		body: `
+			<p style="text-align: center; font-size: 85%"><b>Wow!</b></p>
+			<p style="text-align: center; font-size: 80%">You reached the end of the story.</p>
+			<p style="text-align: center; font-size: 80%">You made it through {{stats.inventory.storyTracker}} scene(s). We'll keep adding more scenes, so check back later!</p>
 			<p style="text-align: center; font-size: 70%"><a href='index.html'><b>Start Again</b></a></p>
 		`,
 	},
@@ -561,6 +578,7 @@ monogatari.assets("music", {
 	quiz2Theme: "funky-and-jazzy-gang-loop-251858.mp3",
 	drumRoll: "drum-roll-2-228358-loop.mp3",
 	thinkingTheme: "1-efek-sound-5-220035-thinking.mp3",
+	endingTheme: "peaceful-24736.mp3",
 });
 
 // Define the voice files used in the game.
@@ -571,6 +589,13 @@ monogatari.assets("sounds", {
 	drumRollEnd: "drum-roll-2-228358-end.mp3",
 	wrongAnswer: "error-8-206492.mp3",
 	rightAnswer: "1-efek-sound-3-220030-right.mp3",
+	alarmSound: "alarm-clock-90867.mp3",
+	carDriveBySound: "car-passing-by-272055.mp3",
+	rainSound: "heavy-rain-364882.mp3",
+	thunderSound: "rain-and-thunder-sfx-12820.mp3",
+	schoolBellSound: "electronic-school-bell-81033.mp3",
+	crowdSound: "crowd-noise-284490.mp3",
+	heySound: "hey-89820.mp3",
 });
 
 // Define the videos used in the game.
@@ -582,7 +607,7 @@ monogatari.assets("images", {});
 // Define the backgrounds for each scene.
 monogatari.assets("scenes", {
 	// Start
-
+	Scene1: "1.png",
 });
 
 // Define the Characters
@@ -600,7 +625,6 @@ monogatari.characters({
 			running: "player (2).png",
 		},
 	},
-	
 });
 
 const { Storage } = monogatari;
@@ -609,110 +633,155 @@ const { Storage } = monogatari;
 // Define the start scene.
 // This is where the game will begin when it's launched.
 // You can change 'Start' to any label you want to be the initial scene.
-monogatari.script ({
-    // The 'Start' label is the entry point of the game.
-    // It's good practice to have a distinct start label.
-    'Start': [
-        // This 'jump' command immediately takes the player to 'Scene_1_Start'.
-        // This is useful if you want to have an introductory splash screen
-        // before the main story begins, but for now, we jump straight in.
-        'jump Scene_1_Start'
-    ],
+monogatari.script({
+	// The 'Start' label is the entry point of the game.
+	// It's good practice to have a distinct start label.
+	Start: [
+		// This 'jump' command immediately takes the player to 'Scene_1_Start'.
+		// This is useful if you want to have an introductory splash screen
+		// before the main story begins, but for now, we jump straight in.
+		"jump Scene_1_Start",
+	],
 
-    // --- Scene 1: The Terrible Morning and the Choice ---
-    'Scene_1_Start': [
-        // Narrative text is enclosed in double quotes.
-        // Each string represents a single line or paragraph of text that
-        // appears on screen. The player clicks to advance.
-        'This morning was terrible for you. You got out of bed, but it was already 7:45!',
-        'You were almost late for school, but you skipped your breakfast and your mother drove you to school.',
-        'She had to drive really fast to get you to school on time! She almost hit two of your friends on the way.',
-        'They saw you in the car, so you know they will be angry later.',
-        '', // An empty string can be used to create a pause or a new line effect.
-        'So you got to school, but then it started to rain!',
-        'It was only 10 meters to go from the car to the school entrance, but you got really wet.',
-        'And just as you entered the school, lightning flashed and thunder boomed.',
-        'You have the feeling that it\'s going to be a really hard day.',
-        '',
-        'First period was OK. The English teacher was really funny, so you had a good time, but you were a little sleepy, so you missed some questions on the English quiz.',
-        'Second period was a little better at first, but you started getting hungry. You like your math teacher, but you couldn\'t answer any questions because your stomach was growling.',
-        'Third period, you almost died! You were so, so, so hungry. Tomorrow, you are going to get up early to eat your breakfast.',
-        '',
-        'Now it\'s lunchtime. At last! Now you can go buy some bread for lunch! You start to go down the stairs, but then you see a crowd of people!',
-        'There are a lot of very hungry high school students here today! You don\'t know if you will be able to get any bread today. But you\'re so hungry!',
-        '',
-        'And then you hear a very angry voice. "Hey, you! Come here!"',
-        'Uh-oh! It\'s one of your friends from this morning, the one your mother almost hit with her car because you were late! And your other friend is there, too. And they look so angry!',
-        '',
-        'You\'re hungry, but you don\'t want to talk to them today, so you want to get away, right away! You start to have a funny feeling, and you\'re panicking, so you look around.',
-        'There\'s the hallway to the left to go do the high school area. But there are a lot of people there, so you don\'t know if you can get away.',
-        'There\'s a door to the student council room, and it looks really good right now, almost shining in your eyes. Maybe you can escape that way.',
-        'You can\'t go straight ahead because there are too many people waiting to buy bread.',
-        'You can\'t go right to the junior high school area because there are too many students coming to buy bread.',
-        'And you can\'t go back up the stairs because your angry friends are coming.',
-        '',
-        '"Hey, you! Get over here!!"',
-        'What do you do?',
+	// --- Scene 1: The Terrible Morning and the Choice ---
+	Scene_1_Start: [
+		// Narrative text is enclosed in double quotes.
+		// Each string represents a single line or paragraph of text that
+		// appears on screen. The player clicks to advance.
 
-        // This is a 'choice' block, which presents options to the player.
-        // Each option has a text (what the player sees) and a 'Do' action.
-        // The 'Do' action is typically a 'jump' to another label in the script.
-        {
-            'Choice': {
-                'Dialog': 'What do you do?', // This dialog appears above the choices.
-                'Go_High_School': {
-                    'Text': 'Go to the high school area and try to escape.',
-                    'Do': 'jump Scene_1_Bad_Ending' // Jumps to the bad ending.
-                },
-                'Go_Student_Council': {
-                    'Text': 'Go to the student council room and try to hide.',
-                    'Do': 'jump Scene_1_Continuation_Ending' // Jumps to the continuation.
-                },
-                'Wait_In_Line': {
-                    'Text': 'Wait in line to buy some bread because you are too hungry to worry about your friends.',
-                    'Do': 'jump Scene_1_Good_Ending' // Jumps to the good ending.
-                }
-            }
-        }
-    ],
+		// Add a point to the storyTracker for each scene
+		{
+			Function: {
+				Apply: () => {
+					const {
+						inventory: { storyTracker },
+					} = monogatari.storage("stats");
+					monogatari.storage({
+						stats: {
+							inventory: {
+								storyTracker: storyTracker + 1,
+							},
+						},
+					});
+				},
+			},
+		},
 
-    // --- Scene 1: Bad Ending ---
-    'Scene_1_Bad_Ending': [
-        'You go to the high school area and try to escape. You start running, but you bump into a teacher, and the teacher gets very angry. "You can\'t run in the hallway! What are you doing?"',
-        'You try to say sorry, but your friends join you, and they start yelling, too.',
-        '"What were you doing this morning! You almost killed me!"',
-        '"Don\'t you know you can\'t run in the hallway! It\'s dangerous!"',
-        '"Why are you running away from me? You have to say sorry for this morning!"',
-        '"Hey, are you listening to me? And you know what, you only got 10 points on your last test, too! What are you doing?"',
-        'You feel really, really bad. And you are so hungry, too! You should have just stayed home this morning.',
-        // The 'end' command stops the game. The player will typically see a "The End" screen
-        // and can then restart the game or go back to the main menu.
-        'end'
-    ],
+		"show scene rgb(0, 0, 0) with fadeIn",
+		"show scene Scene1 with fadeIn",
+		"play sound alarmSound", // with volume 30
+		"This morning was terrible for you. You got out of bed, but it was already 7:45!",
+		"You were almost late for school, but you skipped your breakfast and your mother drove you to school.",
+		"play sound carDriveBySound", // with volume 30
+		"She had to drive really fast to get you to school on time! She almost hit two of your friends on the way.",
+		"They saw you in the car, so you know they will be angry later.",
+		"", // An empty string can be used to create a pause or a new line effect.
+		"play sound rainSound", // with volume 30
+		"So you got to school, but then it started to rain!",
+		"It was only 10 meters to go from the car to the school entrance, but you got really wet.",
+		"play sound thunderSound", // with volume 30
+		"And just as you entered the school, lightning flashed and thunder boomed.",
+		"You have the feeling that it's going to be a really hard day.",
+		"",
+		"play sound schoolBellSound", // with volume 30
+		"First period was OK. The English teacher was really funny, so you had a good time, but you were a little sleepy, so you missed some questions on the English quiz.",
+		"play sound schoolBellSound", // with volume 30
+		"Second period was a little better at first, but you started getting hungry. You like your math teacher, but you couldn't answer any questions because your stomach was growling.",
+		"play sound schoolBellSound", // with volume 30
+		"Third period, you almost died! You were so, so, so hungry. Tomorrow, you are going to get up early to eat your breakfast.",
+		"",
+		"Now it's lunchtime. At last! Now you can go buy some bread for lunch! You start to go down the stairs, but then you see a crowd of people!",
+		"play sound crowdSound", // with volume 30
+		"There are a lot of very hungry high school students here today! You don't know if you will be able to get any bread today. But you're so hungry!",
+		"",
+		"play sound heySound", // with volume 30
+		'And then you hear a very angry voice. "Hey, you! Come here!"',
+		"Uh-oh! It's one of your friends from this morning, the one your mother almost hit with her car because you were late! And your other friend is there, too. And they look so angry!",
+		"",
+		"You're hungry, but you don't want to talk to them today, so you want to get away, right away! You start to have a funny feeling, and you're panicking, so you look around.",
+		"There's the hallway to the left to go do the high school area. But there are a lot of people there, so you don't know if you can get away.",
+		"There's a door to the student council room, and it looks really good right now, almost shining in your eyes. Maybe you can escape that way.",
+		"You can't go straight ahead because there are too many people waiting to buy bread.",
+		"You can't go right to the junior high school area because there are too many students coming to buy bread.",
+		"And you can't go back up the stairs because your angry friends are coming.",
+		"",
+		"play sound heySound", // with volume 30
+		'"Hey, you! Get over here!!"',
+		"What do you do?",
 
-    // --- Scene 1: Continuation Ending (Placeholder for Scene 2) ---
-    'Scene_1_Continuation_Ending': [
-        'You run to the student council room and open the door. As you get closer, the door becomes really bright. But you have to get away, now!',
-        'You open the door, jump in, and suddenly the whole world changes!',
-        // This is where 'Scene 2' would begin.
-        // You would uncomment the line below and define a 'Scene_2' label
-        // in your monogatari.script object with its own content.
-        // For now, it ends here as Scene 2 content wasn't provided.
-        // 'jump Scene_2'
-        'end' // Ends the game for now, as Scene 2 is not defined.
-    ],
+		// This is a 'choice' block, which presents options to the player.
+		// Each option has a text (what the player sees) and a 'Do' action.
+		// The 'Do' action is typically a 'jump' to another label in the script.
+		{
+			Choice: {
+				Dialog: "What do you do?", // This dialog appears above the choices.
+				Go_High_School: {
+					Text: "Go to the high school area and try to escape.",
+					Do: "jump Scene_1_Bad_Ending", // Jumps to the bad ending.
+				},
+				Go_Student_Council: {
+					Text: "Go to the student council room and try to hide.",
+					Do: "jump Scene_1_Continuation_Ending", // Jumps to the continuation.
+				},
+				Wait_In_Line: {
+					Text: "Wait in line to buy some bread because you are too hungry to worry about your friends.",
+					Do: "jump Scene_1_Good_Ending", // Jumps to the good ending.
+				},
+			},
+		},
+	],
 
-    // --- Scene 1: Good Ending ---
-    'Scene_1_Good_Ending': [
-        'You are just too hungry to care about your friends! You get in line and wait. Your friends come, and they are very angry!',
-        '"Hey, what were you doing this morning? Your mother almost hit us!"',
-        'You apologize. "I\'m so, so sorry! I was late, and I couldn\'t eat anything, and my mother had to drive really fast!"',
-        '"But it was so dangerous!"',
-        'Just then, you feel you have no energy. You fall down and can\'t get up.',
-        '"Hey, are you OK?"',
-        '"Is it because you couldn\'t eat your breakfast?"',
-        'Your friends are worried about you. You made them angry, but they care a lot about you. They help you get up and get some bread, and you feel better. It was a really bad morning, but you know it\'s going to be a good day after all.',
-        'end'
-    ]
+	// --- Scene 1: Bad Ending ---
+	Scene_1_Bad_Ending: [
+		"play music endingTheme with volume 100 fade 2 loop",
+		"show scene Scene1 with fadeIn",
+		'You go to the high school area and try to escape. You start running, but you bump into a teacher, and the teacher gets very angry. "You can\'t run in the hallway! What are you doing?"',
+		"You try to say sorry, but your friends join you, and they start yelling, too.",
+		'"What were you doing this morning! You almost killed me!"',
+		"\"Don't you know you can't run in the hallway! It's dangerous!\"",
+		'"Why are you running away from me? You have to say sorry for this morning!"',
+		'"Hey, are you listening to me? And you know what, you only got 10 points on your last test, too! What are you doing?"',
+		"You feel really, really bad. And you are so hungry, too! You should have just stayed home this morning.",
+		// The 'end' command stops the game. The player will typically see a "The End" screen
+		// and can then restart the game or go back to the main menu.
+		"show particles universe",
+		"show message BadEnd",
+		"stop music endingTheme with fade 2",
+		"end",
+	],
+
+	// --- Scene 1: Continuation Ending (Placeholder for Scene 2) ---
+	Scene_1_Continuation_Ending: [
+		"play music endingTheme with volume 100 fade 2 loop",
+		"show scene Scene1 with fadeIn",
+		"You run to the student council room and open the door. As you get closer, the door becomes really bright. But you have to get away, now!",
+		"You open the door, jump in, and suddenly the whole world changes!",
+		// This is where 'Scene 2' would begin.
+		// You would uncomment the line below and define a 'Scene_2' label
+		// in your monogatari.script object with its own content.
+		// For now, it ends here as Scene 2 content wasn't provided.
+		// 'jump Scene_2'
+		"show particles universe",
+		"show message ToBeContinued",
+		"stop music endingTheme with fade 2",
+		"end", // Ends the game for now, as Scene 2 is not defined.
+	],
+
+	// --- Scene 1: Good Ending ---
+	Scene_1_Good_Ending: [
+		"play music endingTheme with volume 100 fade 2 loop",
+		"show scene Scene1 with fadeIn",
+		"You are just too hungry to care about your friends! You get in line and wait. Your friends come, and they are very angry!",
+		'"Hey, what were you doing this morning? Your mother almost hit us!"',
+		"You apologize. \"I'm so, so sorry! I was late, and I couldn't eat anything, and my mother had to drive really fast!\"",
+		'"But it was so dangerous!"',
+		"Just then, you feel you have no energy. You fall down and can't get up.",
+		'"Hey, are you OK?"',
+		'"Is it because you couldn\'t eat your breakfast?"',
+		"Your friends are worried about you. You made them angry, but they care a lot about you. They help you get up and get some bread, and you feel better. It was a really bad morning, but you know it's going to be a good day after all.",
+		"show particles universe",
+		"show message GoodEnd",
+		"stop music endingTheme with fade 2",
+		"end",
+	],
 });
-

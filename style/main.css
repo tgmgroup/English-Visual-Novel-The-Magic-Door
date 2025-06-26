@@ -146,6 +146,11 @@ button:hover {
 	color: white;
 }
 
+[data-component="title"] {
+	text-align: center;
+	align-items: center;;
+}
+
 /* Character Images Styles */
 [data-screen="game"] [data-character] {
 }

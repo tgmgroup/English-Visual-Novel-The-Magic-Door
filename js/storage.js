@@ -10,7 +10,7 @@ monogatari.storage({
 		hp: 100,
 		mp: 100,
 		inventory: {
-			knowledge: 0,
+			storyTracker: 0,
 		},
 	},
 });
