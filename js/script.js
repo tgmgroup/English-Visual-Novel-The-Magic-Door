@@ -699,7 +699,7 @@ monogatari.script({
 		"Uh-oh! It's one of your friends from this morning, the one your mother almost hit with her car because you were late! And your other friend is there, too. And they look so angry!",
 		"",
 		"You're hungry, but you don't want to talk to them today, so you want to get away, right away! You start to have a funny feeling, and you're panicking, so you look around.",
-		"There's the hallway to the left to go do the high school area. But there are a lot of people there, so you don't know if you can get away.",
+		"There's the hallway to the left to go to the high school area. But there are a lot of people there, so you don't know if you can get away.",
 		"There's a door to the student council room, and it looks really good right now, almost shining in your eyes. Maybe you can escape that way.",
 		"You can't go straight ahead because there are too many people waiting to buy bread.",
 		"You can't go right to the junior high school area because there are too many students coming to buy bread.",
