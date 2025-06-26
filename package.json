@@ -48,7 +48,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.26.9",
-    "electron": "^34.0.2",
+    "electron": "^37.1.0",
     "electron-builder": "^25.1.8",
     "electron-notarize": "^1.2.2",
     "http-server": "^14.1.1",
