@@ -47,7 +47,7 @@
     "build:linux": "yarn electron-builder -l"
   },
   "devDependencies": {
-    "@babel/core": "^7.26.9",
+    "@babel/core": "^7.27.4",
     "electron": "^34.0.2",
     "electron-builder": "^25.1.8",
     "electron-notarize": "^1.2.2",
