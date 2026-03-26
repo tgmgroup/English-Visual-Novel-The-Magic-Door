@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 /* global Monogatari */
 /* global monogatari */
 
@@ -27,12 +27,60 @@ const { $_ready, $_ } = Monogatari;
 
 // 1. Outside the $_ready function:
 
+// plugin.js
 
-$_ready (() => {
+(function (Monogatari) {
+	// This is the main plugin object
+	Monogatari.plugin("TypeChoice", {
+		// Initialization method
+		init() {
+			console.log("TypeChoice plugin initialized");
+		},
+		// Hook into the `choices` function to customize how choices are displayed
+		choice(options) {
+			// Hide the default choice buttons
+			$(".choices").hide();
+
+			// Create an input field for typing the choice
+			const inputField = $(
+				'<input type="text" id="type-choice-input" placeholder="Type your choice here..." />'
+			);
+			$("body").append(inputField);
+
+			// Focus on the input field automatically
+			inputField.focus();
+
+			// Listen for the "Enter" key to confirm the choice
+			inputField.on("keypress", (e) => {
+				if (e.key === "Enter") {
+					const userChoice = inputField.val().trim().toLowerCase();
+					// Check if the user's input matches one of the options
+					const matchedOption = options.find(
+						(option) => option.text.toLowerCase() === userChoice
+					);
+
+					if (matchedOption) {
+						// If a match is found, proceed to the next story node
+						Monogatari.engine().story.addChoice(matchedOption);
+						// Hide the input field and show the next scene
+						inputField.remove();
+						$(".choices").show();
+					} else {
+						// If no match is found, show an error or re-focus the input field
+						alert("Invalid choice. Please try again.");
+						inputField.val("");
+						inputField.focus();
+					}
+				}
+			});
+		},
+	});
+})(Monogatari);
+
+$_ready(() => {
 	// 2. Inside the $_ready function:
 
-	monogatari.init ('#monogatari').then (() => {
+	monogatari.init("#monogatari").then(() => {
 		// 3. Inside the init function:
-
 	});
 });
